@@ -16,6 +16,7 @@
                 <input v-model="nomeEmpresa" type="text" name="nomeEmpresa" id="nomeEmpresa" class="form-control">
             </div>
             <div class="input-container">
+                <label for="mes">Mês</label>
                 <select v-model="month" class="form-control form-control-sm" id="FormControlSelect">
                     <option>JANEIRO</option>
                     <option>FEVEREIRO</option>
@@ -23,15 +24,18 @@
                     <option>ABRIL</option>
                     <option>MAIO</option>
                 </select>
+            </div>
+            <div class="input-container">
+                <label for="valorInicial">Valor Inicial</label>
                 <input v-model.lazy="amount" v-money3="config" v-model="valorInicial" type="text" name="valorInicial" id="valorInicial" class="form-control">
             </div>
             <div class="input-container">
-                
+                <label for="valorFinal">Valor Final</label>                
                 <input v-model.lazy="amount" v-money3="config" v-model="valorFinal" type="text" name="valorFinal" id="valorFinal" class="form-control">
             </div>
         </form>
         <div class="input-container">
-            <button @click="adicionarDados()" class="btn btn-primary" style="margin-top: 30px;">Cadastrar</button>
+            <button @click="adicionarDados()" class="btn btn-primary" id="btn-cadastrar">Cadastrar</button>
         </div>
 
     </div>
@@ -59,6 +63,7 @@
                         <button @click="removerDados(index)" class="btn btn-primary" id="btn-deletar">Deletar</button>
                     </div>
                 </div>
+                <div class="footer-shadow"></div>
                 <!---- <div class="form-resultado-final">Valor a Receber: {{ dado.valorReal }}
                     <button @click="adicionarDespesas()" class="submit-btn">Despesas</button>
                 </div>  -->
@@ -216,16 +221,14 @@ export default {
         padding-right: 50px;
     }
 
-    label {
-        
+    label {        
         margin-bottom: 15px;
         color: #222;
-        padding: 1px 1px;
-        
+        padding: 1px 1px;        
         height: 15px;
     }
 
-    input #date, #codigoEmpresa, #valorInicial, #valorFinal{
+    input #date, #codigoEmpresa, #valorInicial, #valorFinal, #FormControlSelect{
         padding: 5px 10px;
         width: 100px;
         height: 35px;
@@ -242,13 +245,13 @@ export default {
 
     }
 
-    #valorFinal {
-        margin-top: 30px;
+    #valorInicial, #valorFinal, #FormControlSelect {
+        margin-top: 0 auto;
     }
 
     #nomeEmpresa {
         padding: 5px 10px;
-        width: 300px;
+        width: 250px;
         height: 35px;
     }
 
@@ -273,6 +276,12 @@ export default {
         display: flex;
         margin-left: 90px;
         margin-top: -25px;
+    }
+
+    #btn-cadastrar {
+        display: flex;
+        margin-left: 1190px;
+        margin-top: -156px;
     }
 
     .form-table-month {
@@ -304,6 +313,7 @@ export default {
     border-bottom: 3px solid #333;
     margin-left: 1px;
     width: 100%;
+    margin-bottom: 10px;
 }
 
 #form-table-heading div,
@@ -338,6 +348,19 @@ export default {
 
 textarea {
   width: 100px;
+}
+
+.footer-shadow {
+    background:rgba(2, 2, 2, 0.5);
+    position: fixed;
+    margin-left: 180px;
+    left: 0;
+    bottom: 0;
+    width: 70%;
+    height: 50px;   
+    color: white;
+    text-align: center;
+    top: 37.8em;
 }
 
 </style>
