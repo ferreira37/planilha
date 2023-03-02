@@ -1,6 +1,6 @@
 <template>
   <div class="man-container">
-    <h2>LANÇAMENTOS DRE</h2>
+    <h2>DRE</h2>
     <FormCadastro />
   </div>
 </template>

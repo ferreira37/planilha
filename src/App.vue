@@ -46,7 +46,8 @@ h1 {
   color: #222;
 }
 
-@media only screen and (max-device-width: 1200px) {
+@media screen and (max-width: 1200px) {
 * { width:100%; }
 }
+
 </style>

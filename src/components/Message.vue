@@ -1,8 +1,6 @@
 <template>
-    <div class="alert alert-danger" role="alert" style="position: absolute; margin-left: 530px; top: 340px;">
-        <p>{{ msg }}</p>
-        <div class="loading_1"></div>
-        
+    <div class="alert alert-info" role="alert" id="alert">
+        {{ msg }}
     </div>
 </template>
 
@@ -14,3 +12,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+#alert {
+    position: absolute;
+    margin-left: 530px;
+    top: 340px;
+}
+
+</style>

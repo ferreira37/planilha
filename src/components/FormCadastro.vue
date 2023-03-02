@@ -1,6 +1,7 @@
 <template>   
     <div>
         <Message :msg="msg" v-show="msg"/>
+        <Despesas id="adicionar-despesas" :msg="modal"  v-if="isOpenModal"/>
         <form id="cadastro-form">
             <div class="input-container">
                 <label for="date">Data:</label>
@@ -35,32 +36,32 @@
 
     </div>
 
-    <div id="form-table">
+    <div id="form-table" v-for="dado in dados" :key="dado">
         <div>
-            <div id="form-table-rows" v-for="dado in dados" :key="dado">
-                <div class="form-table-row">
-                    <div id="form-table-heading">
-                        <div>Data:</div>
-                        <div>Cód Empresa:</div>
-                        <div>Nome Empresa:</div>
-                        <div class="valor-inicial">{{ dado.month }}</div>
-                        <div>{{ dado.month }}</div>
-                    </div>                   
+            <div id="form-table-heading" v-if="dado.month">
+                <div>Data:</div>
+                <div>Cód Empresa:</div>
+                <div>Nome Empresa:</div>
+                <div class="form-table-month">{{ dado.month }}</div>
+                <div class="form-table-months">{{ dado.month }}</div>
+            </div>
+            <div id="form-table-rows">
+                <div class="form-table-row">                   
                     <div>{{ dado.date }}</div>
                     <div>{{ dado.codEmpresa }}</div>
                     <div>{{ dado.nomeEmpresa }}</div>
-                    <div @click="abrirFecharCaixaDeComentario()" class="valor-inicial">{{ dado.valorInicial }}</div>
+                    <div @click="abrirFecharCaixaDeComentario()">{{ dado.valorInicial }}</div>
                     <div v-show="!isOpen" v-bind:style="styleObject" class='infowindow-balloon'>
                         <textarea id='comentario'></textarea>
                         <a @click.stop.prevent="abrirFecharCaixaDeComentario()" v-bind:style="styleObjectClose" class='close'>x</a>
                     </div>
                     <div>{{ dado.valorFinal }}
-                        <button class="btn btn-primary" id="btn-atualizar">Atualizar</button>
+                        <button @click="removerDados(index)" class="btn btn-primary" id="btn-deletar">Deletar</button>
                     </div>
                 </div>
-                <div class="form-resultado-final">Valor a Receber: {{ dado.valorReal }}
-                    <button class="submit-btn">Despesas</button>
-                </div>
+                <!---- <div class="form-resultado-final">Valor a Receber: {{ dado.valorReal }}
+                    <button @click="adicionarDespesas()" class="submit-btn">Despesas</button>
+                </div>  -->
             </div>
         </div>
     </div>
@@ -70,16 +71,19 @@
 <script>
 import { Money3Directive } from 'v-money3';
 import Message from './Message.vue';
+import Despesas from './Despesas.vue';
 
 export default {
     name: 'FormCadastro',
     components: {
-        Message
+        Message,
+        Despesas
     },
     data() {
         return {
             month: '',
             isOpen: false,
+            isOpenModal: false,
             amount: 0,
             dados: [],
             date: '',
@@ -91,6 +95,7 @@ export default {
             valor1: '',
             valor2: '',
             msg: '',
+            modal: '',
             styleObject: {
                 display: 'none',
                 fontSize: '16px',
@@ -172,6 +177,14 @@ export default {
                 this.limparCampos();
             }
                                    
+        },
+        removerDados(index) {
+            this.dados.splice(index, 1);
+        },
+        adicionarDespesas() {
+            this.isOpenModal = !this.isOpenModal
+            this.modal = `Olá`
+            
         },
         limparCampos() {
             this.date = '',
@@ -256,17 +269,23 @@ export default {
         color: #222;
     }
 
-    #btn-atualizar {
+    #btn-deletar {
         display: flex;
         margin-left: 90px;
         margin-top: -25px;
     }
 
-    .valor-inicial {
-    background-color: yellow;
-    color: #fc2003;
-    width: 100px;
-}
+    .form-table-month {
+        background-color: yellow;
+        max-width: 250px;
+        margin-right: 1px;
+    }
+
+    .form-table-months {
+        background-color: green;
+        max-width: 250px;
+        margin-left: 1px;
+    }
 
 
     #form-table {
