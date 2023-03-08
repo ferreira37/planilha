@@ -54,20 +54,17 @@
                     <div>{{ dado.date }}</div>
                     <div>{{ dado.codEmpresa }}</div>
                     <div>{{ dado.nomeEmpresa }}</div>
-                    <div @click="abrirFecharCaixaDeComentario()">{{ dado.valorInicial }}</div>
-                    <div v-show="!isOpen" v-bind:style="styleObject" class='infowindow-balloon'>
-                        <textarea id='comentario'></textarea>
-                        <a @click.stop.prevent="abrirFecharCaixaDeComentario()" v-bind:style="styleObjectClose" class='close'>x</a>
-                    </div>
+                    <div id="valor-inicial" @click="abrirFecharCaixaDeComentario()">{{ dado.valorInicial }}</div>
+                    <CommentBoxVue v-show="isOpen"/>
                     <div>{{ dado.valorFinal }}
                         <button @click="removerDados(index)" class="btn btn-primary" id="btn-deletar">Deletar</button>
                     </div>
                 </div>
-                <div class="footer-shadow"></div>
-                <!---- <div class="form-resultado-final">Valor a Receber: {{ dado.valorReal }}
-                    <button @click="adicionarDespesas()" class="submit-btn">Despesas</button>
-                </div>  -->
-            </div>
+                <div class="">
+                    <div id="form-resultado-final">Valor a Receber: </div>
+                        <button id="btn-despesas" @click="adicionarDespesas()" class="btn btn-primary">Despesas</button>
+                    </div>
+                </div>
         </div>
     </div>
     
@@ -77,12 +74,14 @@
 import { Money3Directive } from 'v-money3';
 import Message from './Message.vue';
 import Despesas from './Despesas.vue';
+import CommentBoxVue from './CommentBox.vue';
 
 export default {
     name: 'FormCadastro',
     components: {
         Message,
-        Despesas
+        Despesas,
+        CommentBoxVue
     },
     data() {
         return {
@@ -96,32 +95,12 @@ export default {
             nomeEmpresa: '',
             valorInicial: '',
             valorFinal: '',
-            valorReal: '',
+            valorReceber: '',
             valor1: '',
             valor2: '',
+            valor3: '',
             msg: '',
-            modal: '',
-            styleObject: {
-                display: 'none',
-                fontSize: '16px',
-                position: 'absolute',
-                marginTop: '80px',
-                marginLeft: '850px',
-                padding: '5px',
-                color: '#ffffff',
-                zIndex: '3000',
-                borderRadius: '10px',
-                maxWidth: '110px'
-            },
-            styleObjectClose: {
-                position: 'absolute',
-                top: '-10px',
-                left:' calc(100% - 10px)',
-                backgroundColor: '#001040',
-                padding: '0 5px',
-                borderRadius: '15px',
-                cursor: 'pointer !important'
-            }
+            modal: ''
         }
     },
     computed: {
@@ -142,18 +121,15 @@ export default {
     },
     methods: {
         calcularValores() {
-            this.valor1 = parseFloat(this.valorInicial);
-            this.valor2 = parseFloat(this.valorFinal);
-            this.valorReal = (this.valor2 - this.valor1);
-            Number(this.valorReal).toLocaleString('pt-br', {minimumFractionDigits: 2,});
+            let total = '';
+            for(var i = 0; i < this.dados.length; i++) {
+                total += parseFloat(this.dados[i].valorInicial).toFixed(2);
+                document.getElementById('form-resultado-final').innerHTML = total;
+                
+            }
         },
         abrirFecharCaixaDeComentario() {
             this.isOpen = !this.isOpen
-        },
-        aparecerComentario() {
-            var texto = document.getElementById("comentario").value;
-            console.log(texto)
-
         },
         formatarHora() {
             this.date = new Date();
@@ -163,7 +139,7 @@ export default {
             this.formatarHora();
 
             if(this.codEmpresa.trim() === '' || this.nomeEmpresa.trim() === '' || 
-            this.valorInicial.trim() === '0,00' || this.valorFinal.trim() === '0,00') {
+            this.valorInicial.trim() === '0,00') {
                 this.msg = `É obrigatório preencher todos os campos`;
                 setTimeout(() => {
                     this.msg = ""                    
@@ -176,7 +152,7 @@ export default {
                     nomeEmpresa: this.nomeEmpresa,
                     valorInicial: this.valorInicial,
                     valorFinal: this.valorFinal,
-                    valorReal: this.valorReal,
+                    valorReceber: this.valorReceber,
                     month: this.month
                 })
                 this.limparCampos();
@@ -236,7 +212,7 @@ export default {
     }
 
     #date {
-        width: 110px;
+        width: 120px;
         height: 35px;
     }
     
@@ -255,7 +231,7 @@ export default {
         height: 35px;
     }
 
-    .submit-btn {
+    .btn-despesas {
         background-color: #001040;
         color: #fff;
         padding: 5px 10px;
@@ -265,11 +241,6 @@ export default {
         margin-top: 30px;
         cursor: pointer;
         transition: .5s;
-    }
-
-    .submit-btn:hover {
-        background-color: transparent;
-        color: #222;
     }
 
     #btn-deletar {
@@ -333,31 +304,24 @@ export default {
     width: 100%;
 }
 
-.form-resultado-final {
+#form-resultado-final {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    padding: 2px 0 30px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ccc;
     width: 100%;
     
     
 }
 
-textarea {
-  width: 100px;
-}
-
 .footer-shadow {
     background:rgba(2, 2, 2, 0.5);
     position: fixed;
-    margin-left: 180px;
+    margin-left: 60px;
     left: 0;
     bottom: 0;
-    width: 70%;
-    height: 50px;   
+    width: 90%;
+    height: 60px;   
     color: white;
     text-align: center;
     top: 37.8em;
